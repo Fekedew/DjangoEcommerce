@@ -14,12 +14,27 @@ LABEL = (
     ('BS', 'Best Seller')
 )
 
+class Category(models.Model):
+    category_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.category_name
+
+class Labels(models.Model):
+    labels_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.labels_name
+
 class Item(models.Model):
     item_name = models.CharField(max_length=100)
     price = models.FloatField()
+    image = models.ImageField(upload_to="images", null=True)
     discount_price = models.FloatField(blank=True, null=True)
-    category = models.CharField(choices=CATEGORY, max_length=2)
-    label = models.CharField(choices=LABEL, max_length=2)
+    # category = models.CharField(choices=CATEGORY, max_length=2, null=True)
+    # label = models.CharField(choices=LABEL, max_length=2, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    label = models.ForeignKey(Labels, on_delete=models.CASCADE)
     description = models.TextField()
 
     def __str__(self):

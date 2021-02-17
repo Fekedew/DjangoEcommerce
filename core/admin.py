@@ -4,7 +4,9 @@ from .models import (
     OrderItem, 
     Order,
     CheckoutAddress,
-    Payment
+    Payment,
+    Category,
+    Labels
 )
 
 admin.site.register(Item)
@@ -12,3 +14,5 @@ admin.site.register(OrderItem)
 admin.site.register(Order)
 admin.site.register(CheckoutAddress)
 admin.site.register(Payment)
+admin.site.register(Category)
+admin.site.register(Labels)

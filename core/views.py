@@ -14,7 +14,11 @@ from .models import (
     CheckoutAddress,
     Payment
 )
+import json
+import re
+from django.views.generic.base import TemplateView
 
+import speech_recognition as sr
 import stripe
 stripe.api_key = settings.STRIPE_KEY
 
@@ -23,7 +27,51 @@ class HomeView(ListView):
     model = Item
     template_name = "home.html"
 
+def SearchInSpeakView(request):
+    """docstring for SearchInSpeakView"""
 
+    data = request.POST.get('record')
+    import speech_recognition as sr
+
+    # get audio from the microphone
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Speak:")
+        audio = r.listen(source)
+
+    try:
+        output = " " + r.recognize_google(audio, language="am-ET")
+
+    except sr.UnknownValueError:
+        output = "Could not understand audio"
+    except sr.RequestError as e:
+        output = "Could not request results; {0}".format(e)
+    data =output
+    print("you speak " + data)
+    results = Item.objects.filter(item_name__contains=data)
+    # context['results'] = results
+    return render(request,'result.html',{'results':results})
+           
+        
+class SearchView(TemplateView):
+    model = Item
+    template_name = "result.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        try:
+            kw = self.request.GET.get('q')
+        except:
+            kw = None
+        
+        if kw:
+            kw = " ".join(kw.split())
+            results = Item.objects.filter(item_name__contains=kw)
+            context['results'] = results
+            return context
+        
+            
 class ProductView(DetailView):
     model = Item
     template_name = "product.html"

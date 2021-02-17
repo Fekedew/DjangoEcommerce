@@ -10,6 +10,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Djanggo Ecommerce</title>
   <!-- Font Awesome -->
+
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
   <!-- Bootstrap core CSS -->
   <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -44,12 +45,48 @@
         height: 100vh;
       }
     }
+    form.example input[type=text] {
+      padding: 8px;
+      font-size: 17px;
+      border: 1px solid grey;
+      float: left;
+      width: 80%;
+      background: #f1f1f1;
+    }
+
+    form.example button {
+      float: left;
+      width: 20%;
+      padding: 8px;
+      background: #2196F3;
+      color: white;
+      font-size: 17px;
+      border: 1px solid grey;
+      border-left: none;
+      cursor: pointer;
+    }
+    form.example1 button {
+      float: left;
+      width: 30%;
+      padding-left: 10px;
+      padding-right: 20px;
+      background: #019623;
+      color: white;
+      font-size: 17px;
+      border: 1px solid grey;
+      border-left: none;
+      cursor: pointer;
+    }
+
+    form.example button:hover {
+      background: #0b7dda;
+    }
 
   </style>
 
 
-    {% block extra_head %}
-    {% endblock extra_head %}
+  {% block extra_head %}
+  {% endblock extra_head %}
 
 </head>
 
@@ -61,79 +98,91 @@
 
       <!-- Brand -->
       <a class="navbar-brand waves-effect" href="/">
-        <strong class="blue-text">DJANGO</strong>
+        <strong class="blue-text">HOME</strong>
       </a>
 
       <!-- Collapse -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <!-- Links -->
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-        <!-- Left -->
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-          
-          </li>
-        </ul>
+      <!-- Left -->
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
 
-        <!-- Right -->
-        <ul class="navbar-nav nav-flex-icons">
-          
-         
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a href="{% url 'core:order-summary' %}" class="nav-link waves-effect">
-                {% if request.user|cart_item_count != 0 %}
-                  <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
-                {% endif %}
-                <i class="fas fa-shopping-cart"></i>
-                <span class="clearfix d-none d-sm-inline-block"> Cart </span>
-                </a>
-            </li>
-            <li class="nav-item">
-                 <a class="nav-link waves-effect">
-                Hi {{ user.username }}!
-                </a>
-            </li>
-             </li class="nav-item">
-                <a class="nav-link waves-effect" href="{% url 'logout' %}"> logout</a>
-            </li>
-            {% else %}
-             </li class="nav-item">
-                <a class="nav-link waves-effect" href="{% url 'login' %}"> login</a>
-            </li>
+        </li>
+      </ul>
+
+      <form class="example" action="{% url 'core:search' %}" method="GET" style="max-width:300px">
+        <input type="text" placeholder="Search.." name="q">
+        <button type="submit"><i class="fa fa-search"></i></button>
+      </form>
+      <form class="example1" action="{% url 'core:search-in-speak' %}" method="POST">
+        {% csrf_token %}
+          <input type="hidden" name="speak">
+          <button type="submit"> <i class="fa fa-microphone"></i></button>
+      </form>
+
+
+      <!-- Right -->
+      <ul class="navbar-nav nav-flex-icons">
+
+
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a href="{% url 'core:order-summary' %}" class="nav-link waves-effect">
+            {% if request.user|cart_item_count != 0 %}
+            <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
             {% endif %}
-        </ul>
+            <i class="fas fa-shopping-cart"></i>
+            <span class="clearfix d-none d-sm-inline-block"> Cart </span>
+          </a>
+        </li>
+        <li class="nav-item">
+         <a class="nav-link waves-effect">
+          Hi {{ user.username }}!
+        </a>
+      </li>
+    </li class="nav-item">
+    <a class="nav-link waves-effect" href="{% url 'logout' %}"> logout</a>
+  </li>
+  {% else %}
+</li class="nav-item">
+<a class="nav-link waves-effect" href="{% url 'login' %}"> login</a>
+</li>
+{% endif %}
+</ul>
 
-      </div>
+</div>
 
-    </div>
-  </nav>
-  <!-- Navbar -->
-  <div class="mt-5 pt-4">
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-{{message.tags}}" role="alert">
-            {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
-    </div>
+</div>
+</nav>
+<!-- Navbar -->
+<div class="mt-5 pt-4">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{message.tags}}" role="alert">
+    {{ message }}
 
-    {% block content %}
-    {% endblock content %}
+  </div>
+  {% endfor %}
+  {% endif %}
+</div>
 
-    {% include "footer.html" %}
+{% block content %}
+{% endblock content %}
+
+{% include "footer.html" %}
 
 
-    {% include "script.html" %}
+{% include "script.html" %}
 
-    {% block extra_script %}
-    {% endblock extra_script %}
+{% block extra_script %}
+{% endblock extra_script %}
 
 </body>
 

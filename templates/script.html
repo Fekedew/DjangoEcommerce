@@ -13,3 +13,30 @@
 new WOW().init();
 
 </script>
+
+<script type="text/javascript">
+	const data = '{{ls_json}}'
+	console.log(data)
+
+	const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
+	console.log(rdata)
+
+	const input = document.getElementById('searchHere')
+	console.log(input)
+
+	let filteredArr = []
+	input.addEventListener('keyup', (e)=> {
+		allItem.innerHTML = ""
+		filteredArr = rdata.filter(item=> item['item_name'].includes(e.target.value))
+        console.log(filteredArr)
+        if (filteredArr.length > 0){
+            filteredArr.map(item=>{
+                allItem.innerHTML += `<b>${item['item_name']}</b><br>`
+            })
+        }
+        //  else {
+        //     allItem.innerHTML = "<b>No results found...</b>"
+        // }
+		
+	})
+</script>
