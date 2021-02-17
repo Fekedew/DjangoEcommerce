@@ -15,3 +15,5 @@ Setup And Configuration
 - pip install django-crispy-forms
 - pip install stripe
 
+
+This django eCommerce application has speech recognation to search for products

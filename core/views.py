@@ -26,6 +26,19 @@ stripe.api_key = settings.STRIPE_KEY
 class HomeView(ListView):
     model = Item
     template_name = "home.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        queryset = Item.objects.all()
+    
+        items = []
+        for item in queryset:
+            items.append({'id': item.id, 'item_name': item.item_name, 'item_price': item.price, 
+                'discount_price': item.discount_price, 'description': item.description, 'image':item.image, 'label': item.label.labels_name,
+                'category': item.category.category_name})
+        
+        context['results'] = items
+        return context
+
 
 def SearchInSpeakView(request):
     """docstring for SearchInSpeakView"""
